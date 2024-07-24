@@ -1,19 +1,19 @@
-# Soundtrack Analyzer
+# Trackify
 
 ## Overview
 
-My App Soundtrack Analyzer is a personalized music analytics tool that utilizes Spotify's API. Users can log in to access detailed statistics about their music preferences, including insights into their most played songs, albums, and genres over specific time periods. 
+My App Trackify is a personalized music analytics tool that utilizes Spotify's API. Users can log in to access detailed statistics about their music preferences, including insights into their most played songs, albums, and genres over specific time periods. 
 This app aims to provide a comprehensive and user-friendly experience for music enthusiasts who want to explore and understand their listening habits in depth.
 
 ### Problem
 
-Soundtrack Analyzer addresses a significant gap in the music streaming experience. While platforms like Spotify offer a "wrapped" feature once a year, users are left wanting more frequent and detailed insights into their music habits.
+Trackify addresses a significant gap in the music streaming experience. While platforms like Spotify offer a "wrapped" feature once a year, users are left wanting more frequent and detailed insights into their music habits.
 This app is necessary because it provides real-time and customizable analytics, allowing users to access their most played songs, albums, and genres at any given time.
 
 ### User Profile
 
 The primary users include individuals who actively use Spotify and are interested in a more detailed and customizable analysis of their music activity.
-Users will access the app by logging in with their Spotify credentials, granting Soundtrack Analyzer permission to retrieve their listening data through the Spotify API.
+Users will access the app by logging in with their Spotify credentials, granting Trackify permission to retrieve their listening data through the Spotify API.
 Special considerations should be given to user privacy and data security. Ensure that the app complies with relevant privacy regulations and clearly communicates how user data will be handled. 
 Additionally, make the app accessible and inclusive, considering different user preferences and potential accessibility needs.
 
