@@ -1,0 +1,29 @@
+@use "./variables.scss" as *;
+
+@font-face {
+  font-family: "Gotham";
+  src: url("../../assets/fonts/Gotham-Light.otf") format("opentype");
+  font-weight: 400; //Medium
+}
+
+@font-face {
+  font-family: "Gotham";
+  src: url("../../assets/fonts/Gotham-Thin.otf") format("opentype");
+  font-weight: 300; //Light
+}
+
+@font-face {
+  font-family: "Gotham";
+  src: url("../../assets/fonts/Gotham-Bold.otf") format("opentype");
+  font-weight: 700; //Bold
+}
+
+* {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  font-family: "Gotham";
+  font-weight: 400;
+  color: $font-color-primary;
+}

@@ -1,0 +1,194 @@
+@use "../../styles/partials/variables.scss" as *;
+@use "../../styles/partials/mixins.scss" as *;
+@use "../../styles/partials/global.scss" as *;
+
+.dashboard {
+  background-color: $background-color-primary;
+  padding: 2rem 1rem 1rem 1rem;
+  width: 100%;
+  height: 100vh;
+  @include tablet {
+    padding: 2.5rem 0rem 2.5rem 0rem;
+    overflow: visible;
+  }
+
+  @include mobile {
+    width: auto;
+    height: auto;
+  }
+
+  &--container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: $background-color-primary; 
+
+    @include mobile {
+      align-items: stretch;
+    }
+  }
+
+  &__btn-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 2rem;
+    
+    @include tablet {
+      justify-content: space-evenly;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  &__selected-btn {
+    border: none;
+    background-color: transparent;
+    padding: 2rem 0rem 2rem 0rem;
+
+    @include mobile {
+      padding: 1rem 0rem 1rem 0rem;
+      font-size: 12px;
+    }
+    @include tablet {
+      font-size: 16px;
+      min-width: 150px;
+      text-align: center;
+    }
+  }
+
+  &__icons {
+    width: 40px;
+    height: 40px;
+    @include tablet {
+      width: 55px;
+      height: 55px;
+    }
+
+    &--container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      @include tablet {
+        width: 150px;
+      }
+    }
+  }
+
+  &__selected-btn.active {
+    border-bottom: 2px solid $secondary-color-green;
+    @include tablet {
+      min-width: 150px;
+      text-align: center;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    @include tablet {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      gap: 0;
+      padding-bottom: 2rem;
+      padding-top: 2rem;
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+  }
+
+  &__nav-list {
+    margin-top: 0.5rem;
+    font-size: 11px;
+
+    @include tablet {
+      margin-top: 1rem;
+      font-size: 16px;
+      min-width: 150px;
+      text-align: center;
+    }
+
+    &--arrow {
+      color: $secondary-color-green;
+    }
+  }
+
+  &__dropdown-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    &--item {
+      background-color: #242424;
+      transition: background-color 0.3s ease;
+      border-radius: 20px;
+      color: #ffffff;
+      padding: 7px;
+      font-size: 11px;
+      border: none;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      display: block;
+      z-index: 1;
+      text-align: center;
+      text-wrap: nowrap;
+
+      &:hover {
+        background-color: $secondary-color-green;
+        cursor: pointer;
+      }
+      @include tablet {
+        padding: 14px;
+        font-size: 16px;
+      }
+    }
+  }
+
+  &__button {
+    color: #ffffff;
+    width: 175px;
+    height: 38px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+  }
+
+  &__pages {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1rem;
+    background-color: $background-color-primary;
+    @include tablet {
+      width: 100%;
+      padding-top: 2rem;
+      padding-bottom: 10rem;
+    }
+  }
+
+  &__btn {
+    border: none;
+    background-color: transparent;
+    font-family: "Gotham", monospace;
+    margin-right: 4rem;
+  }
+}

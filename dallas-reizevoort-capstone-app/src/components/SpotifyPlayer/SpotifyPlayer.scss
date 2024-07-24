@@ -1,0 +1,110 @@
+@use "../../styles/partials/variables.scss" as *;
+@use "../../styles/partials/mixins.scss" as *;
+@use "../../styles/partials/global.scss" as *;
+
+// .spotify-player {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   padding-bottom: 2rem;
+//   @include tablet {
+//     padding-top: 2rem;
+//     padding-bottom: 0rem;
+//   }
+
+//   &__close-button {
+//     color: $background-color-secondary;
+//     font-weight: bold;
+//     position: relative;
+//     top: -102px;
+//     right: -14px;
+//     background: none;
+//     border: none;
+//     font-size: 16px;
+//     cursor: pointer;
+//     z-index: 1;
+//   }
+// }
+
+// .spotify-player iframe {
+//   width: 300px;
+//   height: 100px;
+//   @include tablet {
+//     width: 350px;
+//     height: 150px;
+//   }
+// }
+
+
+.spotify-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #282c34;
+  color: white;
+  border-radius: 10px;
+  width: 300px;
+  margin: 0 auto;
+}
+
+.spotify-player__close-button {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.spotify-player__info {
+  display: flex;
+  align-items: center;
+}
+
+.spotify-player__album-art {
+  width: 60px;
+  height: 60px;
+  margin-right: 20px;
+}
+
+.spotify-player__details {
+  display: flex;
+  flex-direction: column;
+}
+
+.spotify-player__controls {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 12px;
+  color: #1db954;
+
+  & > button {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+  }
+}
+
+.spotify-player__progress {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.spotify-player__progress-bar {
+  flex-grow: 1;
+  height: 5px;
+  background-color: #555;
+  margin: 0 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.spotify-player__progress-bar-fill {
+  height: 100%;
+  background-color: #1db954;
+}

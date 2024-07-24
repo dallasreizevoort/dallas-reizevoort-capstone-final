@@ -1,0 +1,95 @@
+@use "../../styles/partials/variables.scss" as *;
+@use "../../styles/partials/mixins.scss" as *;
+@use "../../styles/partials/global.scss" as *;
+
+.recents {
+  @include tablet {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+  }
+  &__wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    @include tablet {
+      gap: 125px;
+    }
+  }
+}
+
+.recent {
+  display: flex;
+  align-items: center;
+  width: 40%;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    width: 40%;
+
+    &--title {
+      width: 60%;
+      display: flex;
+      align-items: center;
+      padding-right: 1rem;
+    }
+  }
+
+  &__rank {
+    font-size: 12px;
+    padding-right: 0.5rem;
+  }
+
+  &__image {
+    width: 40px;
+    height: 40px;
+    @include tablet {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  &__title {
+    font-size: 12px;
+    padding-left: 0.5rem;
+    width: 120px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    @include tablet {
+      font-size: 16px;
+    }
+  }
+
+  &__artist {
+    font-size: 12px;
+    @include tablet {
+      font-size: 16px;
+    }
+  }
+
+  &__button {
+    border: none;
+    background-color: transparent;
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    @include tablet {
+      width: 30px;
+      height: 30px;
+      text-align: center;
+    }
+  }
+
+  &__link {
+    width: 20%;
+    text-align: center;
+  }
+}

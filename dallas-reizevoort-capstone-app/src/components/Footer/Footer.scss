@@ -1,0 +1,21 @@
+@use "../../styles/partials/variables.scss" as *;
+@use "../../styles/partials/mixins.scss" as *;
+@use "../../styles/partials/global.scss" as *;
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+  margin-top: 150px;
+
+  &__copyright {
+    font-size: 11px;
+    padding-bottom: 1rem;
+  }
+
+  &__about {
+    font-size: 11px;
+    text-align: center;
+  }
+}

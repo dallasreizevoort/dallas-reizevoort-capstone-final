@@ -1,0 +1,116 @@
+@use "../../styles/partials/variables.scss" as *;
+@use "../../styles/partials/mixins.scss" as *;
+@use "../../styles/partials/global.scss" as *;
+
+.artists__container {
+  @include tablet {
+    display: flex;
+    flex-wrap: wrap;
+    width: 70%;
+  }
+}
+
+.artists {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @include tablet {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  &__selected {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__selected-btn {
+    border: none;
+    background-color: transparent;
+    padding: 2rem 1rem 2rem 0rem;
+  }
+}
+
+.artist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 2rem;
+  @include tablet {
+    padding-bottom: 3rem;
+    width: 33%;
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-bottom: 0;
+    width: auto;
+    overflow: hidden;
+    
+    @include tablet {
+      padding-bottom: 100%;
+      width: 100%;
+    }
+
+    &__container-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    &-text {
+      display: flex;
+      justify-content: center;
+      min-width: 300px;
+      align-items: center;
+      margin-top: 1rem;
+    }
+  }
+
+  &__rank {
+    padding-right: 1rem;
+    font-size: 16px;
+    display: none;
+    @include tablet {
+      display: flex;
+    }
+
+    &--tablet-desktop {
+      margin-right: 4px;
+    }
+  }
+
+  &__image {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 0.5rem;
+    @include tablet {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  &__title {
+    font-size: 16px;
+  }
+
+  &__link {
+    border: none;
+    background-color: transparent;
+    padding-left: 0.5rem;
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+  }
+}

@@ -1,0 +1,102 @@
+@use "../../styles/partials/variables.scss" as *;
+@use "../../styles/partials/mixins.scss" as *;
+@use "../../styles/partials/global.scss" as *;
+
+.tracks {
+  @include tablet {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 65%;
+    background-color: $background-color-primary;
+  }
+  &__wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    @include tablet {
+      padding-bottom: 1.25rem;
+    }
+  }
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  width: 40%;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    width: 40%;
+
+
+    &--title {
+      width: 60%;
+      display: flex;
+      align-items: center;
+      padding-right: 1rem;
+    }
+  }
+
+  &__rank {
+    padding-right: 0.5rem;
+    font-size: 12px;
+    @include tablet {
+      font-size: 14px;
+    }
+   
+
+  }
+
+  &__image {
+    width: 40px;
+    height: 40px;
+    @include tablet {
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  &__title {
+    font-size: 12px;
+    padding-left: 0.5rem;
+    width: 120px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
+    @include tablet {
+      font-size: 14px;
+      width: 200px;
+    }
+  }
+
+  &__artist {
+    font-size: 12px;
+    @include tablet {
+      font-size: 14px;
+  }
+}
+
+  &__button {
+    border: none;
+    background-color: transparent;
+    padding-left: 4px;
+  }
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    @include tablet {
+      width: 23px;
+      height: 23px;
+    }
+  }
+
+  &__link {
+    width: 10%;
+  }
+}

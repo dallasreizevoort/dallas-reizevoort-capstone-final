@@ -1,0 +1,188 @@
+@use "../../styles/partials/variables.scss" as *;
+@use "../../styles/partials/global.scss" as *;
+@use "../../styles/partials/mixins.scss" as *;
+
+.playlists {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  @include tablet {
+    width: 70%;
+  }
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 1rem;
+    text-align: center;
+    font-size: 21px;
+    @include tablet {
+      font-size: 24px;
+      padding-top: 2rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  &__button {
+    border: none;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-size: 21px;
+    margin-bottom: 2rem;
+    @include tablet {
+      font-size: 24px;
+    }
+  }
+
+  &__create {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    margin-bottom: 200px;
+  }
+
+  &__icon {
+    width: 21px;
+    height: 21px;
+    margin-left: 0.8rem;
+    @include tablet {
+      width: 24px;
+      height: 24px;
+    }
+    @include desktop {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  &__save {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  &__name {
+    width: 186.28px;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    resize: none;
+    border: none;
+    background-color: #242424;
+    @include tablet {
+      width: 250px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    &::placeholder {
+      color: $background-color-secondary;
+      font-size: 14px;
+      @include tablet {
+        font-size: 16px;
+      }
+    }
+
+    &:focus {
+      border: 1px solid #ffffff;
+      outline: #ffffff;
+    }
+  }
+}
+
+.playlist {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  @include tablet {
+    gap: 125px;
+  }
+
+  &__wrapper {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    width: 40%;
+
+    &--title {
+      width: 60%;
+      display: flex;
+      align-items: center;
+      padding-right: 1rem;
+      @include tablet {
+        font-size: 16px;
+      }
+    }
+
+    &--link {
+      width: 10%;
+    }
+  }
+
+  &__title {
+    width: 60%;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    padding-left: 0.5rem;
+    padding-right: 1rem;
+    width: 120px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    @include tablet {
+      font-size: 16px;
+    }
+  }
+
+  &__artist {
+    font-size: 13px;
+    padding-right: 1rem;
+    width: 40%;
+    @include tablet {
+      font-size: 16px;
+    }
+  }
+
+  &__image {
+    width: 35px;
+    height: 35px;
+    padding-left: 1rem;
+  }
+
+  &__link {
+  }
+
+  &__button {
+    border: none;
+    background-color: transparent;
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    @include tablet {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
