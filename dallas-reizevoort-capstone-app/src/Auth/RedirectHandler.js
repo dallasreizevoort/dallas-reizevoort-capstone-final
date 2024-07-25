@@ -8,13 +8,13 @@ function RedirectHandler({ code }) {
   const { error } = useContext(AuthContext);
 
   useEffect(() => {
-    if (code && !error && !location.pathname.startsWith("/dashboard")) { // Check the error state
+    if (code && !error && !location.pathname.startsWith("/dashboard")) {
       const newUrl = new URL(window.location.href);
       newUrl.searchParams.delete('code');
       window.history.replaceState({}, document.title, newUrl.toString());
-      navigate(`/dashboard?code=${code}`, { replace: true });
+      navigate(`/dashboard/tracks`, { replace: true });
     }
-  }, [navigate, code, location.pathname, error]); // Add the error state to the dependency array
+  }, [navigate, code, location.pathname, error]);
 
   return null;
 }

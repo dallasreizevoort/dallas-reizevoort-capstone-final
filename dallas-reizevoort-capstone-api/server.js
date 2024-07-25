@@ -28,7 +28,9 @@ const checkToken = async (req, res, next) => {
 
   if (!accessToken || !refreshToken) {
     console.log("Access token or refresh token not found");
-    return res.status(401).json({ error: "Access token or refresh token not found" });
+    return res
+      .status(401)
+      .json({ error: "Access token or refresh token not found" });
   }
 
   const spotifyApi = new SpotifyWebApi({
@@ -71,6 +73,7 @@ const checkToken = async (req, res, next) => {
   }
 };
 
+
 // Ensure that /login and /refresh routes are handled without token check
 app.post("/login", (req, res) => {
   const code = req.body.code;
@@ -97,7 +100,9 @@ app.post("/login", (req, res) => {
 
       if (!accessToken || !refreshToken) {
         console.log("Failed to retrieve tokens from Spotify");
-        return res.status(400).json({ error: "Failed to retrieve tokens from Spotify" });
+        return res
+          .status(400)
+          .json({ error: "Failed to retrieve tokens from Spotify" });
       }
 
       res.cookie("accessToken", accessToken, {
@@ -161,7 +166,7 @@ app.post("/refresh", (req, res) => {
 
 // Apply the checkToken middleware only to routes that require it
 app.use((req, res, next) => {
-  if (['/login', '/refresh'].includes(req.path)) {
+  if (["/login", "/refresh"].includes(req.path)) {
     return next();
   } else {
     return checkToken(req, res, next);
@@ -244,9 +249,9 @@ app.get("/top-artists", async (req, res) => {
   }
 });
 
-app.get("/top-genres", async (req, res) => {
+app.get('/top-genres', async (req, res) => {
   const accessToken = req.cookies.accessToken;
-  console.log("Access token from request:", accessToken);
+  console.log('Access token:', accessToken);
   if (!accessToken) {
     return res.status(401).json({ error: "Access token not found" });
   }
@@ -255,24 +260,37 @@ app.get("/top-genres", async (req, res) => {
   spotifyApi.setAccessToken(accessToken);
 
   try {
-    const timeRanges = ["short_term", "medium_term", "long_term"];
-    const topGenres = {};
+    const timeRanges = ['short_term', 'medium_term', 'long_term'];
+    const promises = timeRanges.map(timeRange => spotifyApi.getMyTopArtists({ time_range: timeRange, limit: 50 }));
+    const results = await Promise.all(promises);
+    console.log('Spotify API results:', results);
 
-    for (let timeRange of timeRanges) {
-      const data = await spotifyApi.getMyTopArtists({
-        time_range: timeRange,
-        limit: 50,
+    const topGenres = results.map((result, i) => {
+      const genreCounts = {};
+
+      result.body.items.forEach(artist => {
+        artist.genres.forEach(genre => {
+          genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+        });
       });
-      console.log(`${timeRange} data length:`, data.body.items.length);
-      topGenres[timeRange] = data.body.items;
-    }
+
+      const sortedGenres = Object.entries(genreCounts)
+        .sort(([, countA], [, countB]) => countB - countA)
+        .slice(0, 25); 
+
+      return {
+        timeRange: timeRanges[i],
+        topGenres: sortedGenres,
+      };
+    });
 
     res.json(topGenres);
-  } catch (err) {
-    console.error("Error getting top artists:", err);
-    res.status(500).json({ error: err.toString() });
+  } catch (error) {
+    console.error('Failed to fetch top artists:', error);
+    res.status(500).json({ error: 'Failed to fetch top artists' });
   }
 });
+
 
 app.get("/recently-played", async (req, res) => {
   const accessToken = req.cookies.accessToken;
@@ -390,7 +408,7 @@ app.post("/create-playlist", checkToken, async (req, res) => {
   }
 });
 
-app.get("/playback", checkToken, async (req, res) => {
+app.get("/playback", checkToken, (req, res) => {
   const accessToken = req.cookies["accessToken"];
   if (!accessToken) {
     console.log("Access token not found");

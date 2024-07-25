@@ -39,38 +39,76 @@
 .spotify-player {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
+  justify-content: center;
+  padding: 10px;
   background-color: #282c34;
   color: white;
   border-radius: 10px;
   width: 300px;
-  margin: 0 auto;
+  height: 100px;
+  margin-bottom: 2rem;
+  @include tablet {
+    width: 350px;
+    height: 150px;
+  
+  }
 }
 
-.spotify-player__close-button {
-  align-self: flex-end;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 12px;
-  cursor: pointer;
+.spotify-player__close {
+ 
+
+  &--button {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: bold;
+  }
 }
 
 .spotify-player__info {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .spotify-player__album-art {
-  width: 60px;
-  height: 60px;
-  margin-right: 20px;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  @include tablet {
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+  }
 }
 
 .spotify-player__details {
   display: flex;
-  flex-direction: column;
+
+  &--text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &--track {
+    font-size: 12px;
+    @include tablet {
+      font-size: 16px;
+    }
+  
+  }
+
+  &--artist {
+    font-size: 12px;
+    margin-top: 4px;
+    @include tablet {
+      font-size: 14px;
+    }
+  }
 }
 
 .spotify-player__controls {
@@ -80,19 +118,28 @@
   margin-top: 12px;
   color: #1db954;
 
-  & > button {
+  &--button {
     background: none;
     border: none;
     font-size: 22px;
     cursor: pointer;
+    outline: none;
   }
+  &--icon {
+    width: 25px;
+    height: 25px;
+    }
 }
 
 .spotify-player__progress {
   display: flex;
   align-items: center;
   width: 100%;
-  margin-top: 12px;
+  margin-top: 4px;
+
+  &--duration {
+    font-size: 12px;
+  }
 }
 
 .spotify-player__progress-bar {
@@ -107,4 +154,8 @@
 .spotify-player__progress-bar-fill {
   height: 100%;
   background-color: #1db954;
+
+  &--duration {
+    font-size: 12px;
+  }
 }

@@ -14,9 +14,11 @@ import UserMood from "../../assets/images/user_mood.png";
 import UserPlaylist from "../../assets/images/add_playlist.png";
 import UserStats from "../../assets/images/user_stats.png";
 import Footer from "../../components/Footer/Footer";
+import SpotifyPlayer from "../SpotifyPlayer/SpotifyPlayer";
 
 function Dashboard() {
   const { accessToken } = useContext(AuthContext);
+  const [playingTrackId, setPlayingTrackId] = useState(null);
   const [selectedTimeRange, setSelectedTimeRange] = useState("short_term");
   const location = useLocation();
   const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -36,6 +38,10 @@ function Dashboard() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setPlayingTrackId(null);
+  }, [location]);
+
   const toggleDropdown = () => {
     setDropdownVisible(!isDropdownVisible);
   };
@@ -51,7 +57,8 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <Header accessToken={accessToken} />
+      <Header accessToken={accessToken} setPlayingTrackId={setPlayingTrackId} />
+      
       <div className="dashboard__content">
         <div className="dashboard__nav">
           <div className="dashboard__icons--container">
@@ -104,23 +111,25 @@ function Dashboard() {
               className={`dashboard__selected-btn ${selectedTimeRange === "short_term" ? "active" : ""}`}
               onClick={() => setSelectedTimeRange("short_term")}
             >
-              Past 4 weeks
+              Last 4 weeks
             </button>
             <button
               className={`dashboard__selected-btn ${selectedTimeRange === "medium_term" ? "active" : ""}`}
               onClick={() => setSelectedTimeRange("medium_term")}
             >
-              Past 6 months
+              Last 6 months
             </button>
             <button
               className={`dashboard__selected-btn ${selectedTimeRange === "long_term" ? "active" : ""}`}
               onClick={() => setSelectedTimeRange("long_term")}
             >
-              All time
+              Last 12 months
             </button>
           </div>
         )}
-
+<div className="dashboard__player">
+{playingTrackId && <SpotifyPlayer trackId={playingTrackId} />}
+</div>
         <div className="dashboard__pages">
           <Routes>
             <Route
@@ -137,7 +146,7 @@ function Dashboard() {
             />
             <Route
               path="recent"
-              element={<RecentlyPlayed data={data} />}
+              element={<RecentlyPlayed data={data} setPlayingTrackId={setPlayingTrackId} />}
             />
             <Route
               path="playlist"

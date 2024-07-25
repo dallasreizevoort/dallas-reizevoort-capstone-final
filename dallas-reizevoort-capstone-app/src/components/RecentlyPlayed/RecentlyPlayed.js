@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import SpotifyPlayIcon from "../../assets/images/Spotify_Play.png";
-import SpotifyPlayer from "../SpotifyPlayer/SpotifyPlayer";
 import "./RecentlyPlayed.scss";
 import axios from "axios";
 
-function RecentlyPlayed() {
+function RecentlyPlayed( {setPlayingTrackId}) {
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
-  const [playingTrackId, setPlayingTrackId] = useState(null);
+
+  console.log(setPlayingTrackId);
+ 
 
   const handlePlay = (trackId) => {
     console.log("Playing track with ID:", trackId);
     setPlayingTrackId(trackId);
   };
+
+  
 
   useEffect(() => {
     axios
@@ -19,14 +22,15 @@ function RecentlyPlayed() {
         withCredentials: true,
       })
       .then((res) => {
-        console.log("Response from server:", res.data);
         const items = Array.isArray(res.data) ? res.data : [];
-        console.log("Items:", items);
-        const uniqueTracks = items.map((item, index) => ({
-          ...item,
-          id: index,
-        }));
-        console.log("Unique tracks:", uniqueTracks);
+        const uniqueTracks = items
+          .filter((item, index, self) =>
+            index === self.findIndex((t) => t.track.id === item.track.id)
+          )
+          .map((item, index) => ({
+            ...item,
+            id: index,
+          }));
         setRecentlyPlayed(uniqueTracks);
       })
       .catch((err) => console.error(err));
@@ -38,12 +42,7 @@ function RecentlyPlayed() {
 
   return (
     <div className="recents">
-      {playingTrackId && (
-        <SpotifyPlayer
-          trackId={playingTrackId}
-          onClose={() => setPlayingTrackId(null)}
-        />
-      )}
+
       {recentlyPlayed.map((track, index) => (
         <div key={index} className="recents__wrapper">
           <div className="recent__container--title">

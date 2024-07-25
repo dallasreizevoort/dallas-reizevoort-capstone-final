@@ -3,6 +3,9 @@
 @use "../../styles/partials/global.scss" as *;
 
 .tracks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   @include tablet {
     display: flex;
     flex-direction: column;

@@ -7,6 +7,7 @@
   justify-content: space-between;
   flex-direction: column;
   padding-bottom: 1rem;
+  padding-left: 0.5rem;
 
   @include tablet {
     display: flex;

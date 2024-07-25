@@ -3,11 +3,9 @@ import "./Header.scss";
 import Settings from "../Settings/Settings";
 import { Link } from "react-router-dom";
 import spotifyWebApi from "spotify-web-api-node";
-import SpotifyPlayer from "../SpotifyPlayer/SpotifyPlayer";
 import axios from "axios";
 
-function Header() {
-  const [playingTrackId, setPlayingTrackId] = useState(null);
+function Header( {setPlayingTrackId} ) {
   const [userName, setUserName] = useState("");
   const [userPhoto, setUserPhoto] = useState("");
   const [search, setSearch] = useState("");
@@ -182,10 +180,6 @@ function Header() {
         <div className="header__settings--desktop">
           <Settings />
         </div>
-      </div>
-
-      <div className="search-dropdown__player">
-        <SpotifyPlayer trackId={playingTrackId} onClose={() => setPlayingTrackId(null)} />
       </div>
     </div>
   );

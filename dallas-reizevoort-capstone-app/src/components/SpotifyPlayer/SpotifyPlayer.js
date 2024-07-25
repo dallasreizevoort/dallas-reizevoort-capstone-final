@@ -2,6 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 import SpotifyWebApi from "spotify-web-api-js";
 import axios from "axios";
 import "./SpotifyPlayer.scss";
+import PlayIcon from "../../assets/images/play_arrow_50dp_E3E3E3.svg";
+import PauseIcon from "../../assets/images/pause_50dp_E3E3E3.svg";
+import NextIcon from "../../assets/images/skip_next_50dp_E3E3E3.svg";
+import PreviousIcon from "../../assets/images/skip_previous_50dp_E3E3E3.svg";
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -162,32 +166,44 @@ function SpotifyPlayer({ trackId, onClose }) {
 
   return (
     <div className="spotify-player">
-      <button className="spotify-player__close-button" onClick={onClose}>
-        X
-      </button>
+     
       <div className="spotify-player__info">
+      <div className="spotify-player__details">
         {trackInfo.album && (
           <img src={trackInfo.album.images[0].url} alt={trackInfo.name} className="spotify-player__album-art" />
         )}
-        <div className="spotify-player__details">
-          <h3>{trackInfo.name}</h3>
-          <p>{trackInfo.artists && trackInfo.artists.map(artist => artist.name).join(", ")}</p>
+           <div className="spotify-player__details--text">
+          <h3 className="spotify-player__details--track">{trackInfo.name}</h3>
+          <p className="spotify-player__details--artist">{trackInfo.artists && trackInfo.artists.map(artist => artist.name).join(", ")}</p>
         </div>
+        </div>
+        <div className="spotify-player__close">
+        <button className="spotify-player__close--button" onClick={onClose}>
+        X
+      </button>
+      </div>
+      
       </div>
       <div className="spotify-player__controls">
-        <button onClick={handlePreviousTrack} className="spotify-player__button">⏮</button>
-        <button onClick={handlePlayPause} className="spotify-player__button">{isPlaying ? "⏸" : "▶️"}</button>
-        <button onClick={handleNextTrack} className="spotify-player__button">⏭</button>
+        <button onClick={handlePreviousTrack} className="spotify-player__controls--button">
+          <img className="spotify-player__controls--icon" src={PreviousIcon} alt="Previous" />
+        </button>
+        <button onClick={handlePlayPause} className="spotify-player__controls--button">
+          <img className="spotify-player__controls--icon" src={isPlaying ? PauseIcon : PlayIcon} alt="Play/Pause" />
+        </button>
+        <button onClick={handleNextTrack} className="spotify-player__controls--button">
+          <img className="spotify-player__controls--icon" src={NextIcon} alt="Next" />
+        </button>
       </div>
       <div className="spotify-player__progress">
-        <span>{formatTime(position)}</span>
+        <span className="spotify-player__progress--duration">{formatTime(position)}</span>
         <div className="spotify-player__progress-bar">
           <div
             className="spotify-player__progress-bar-fill"
             style={{ width: `${(position / duration) * 100}%` }}
           />
         </div>
-        <span>{formatTime(duration)}</span>
+        <span className= "spotify-player__progress-bar-fill--duration">{formatTime(duration)}</span>
       </div>
     </div>
   );
