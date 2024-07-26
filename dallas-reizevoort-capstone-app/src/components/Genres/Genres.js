@@ -15,7 +15,7 @@ function Genres({ selectedTimeRange }) {
 
   useEffect(() => {
     if (window.innerWidth <= 768) {
-      setChartSize({ width: "320px", height: "500px" });
+      setChartSize({ width: "375px", height: "500px" });
       setFontSize(12);
     } else if (window.innerWidth > 768 && window.innerWidth <= 1200) {
       setChartSize({ width: "600px", height: "400px" });
@@ -75,7 +75,7 @@ function Genres({ selectedTimeRange }) {
   return (
     <div className="genres">
       {topGenres && topGenres.length > 0 && (
-        <div style={{ height: '1000px', overflow: 'auto' }}>
+        <div style={{ height: '1000px', overflow: 'hidden' }}>
           <Chart
             width={chartSize.width}
             height="1000px"
@@ -84,7 +84,7 @@ function Genres({ selectedTimeRange }) {
             data={getChartData(topGenres)}
             options={{
               fontSize: fontSize,
-              chartArea: { left: "50%", width: "50%" },
+              chartArea: { left: "30%", width: "100%" },
               hAxis: {
                 textStyle: { color: "#FFF" },
                 gridlines: { color: "transparent" },
@@ -94,8 +94,6 @@ function Genres({ selectedTimeRange }) {
                 textStyle: { color: "#FFF" },
                 gridlines: { color: "transparent" },
                 textPosition: "out",
-                slantedText: true,
-                slantedTextAngle: 45,
               },
               backgroundColor: "#000000",
               legend: "none",

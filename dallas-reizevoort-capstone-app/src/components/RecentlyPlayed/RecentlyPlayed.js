@@ -2,19 +2,18 @@ import React, { useState, useEffect } from "react";
 import SpotifyPlayIcon from "../../assets/images/Spotify_Play.png";
 import "./RecentlyPlayed.scss";
 import axios from "axios";
+import Loading from "../../assets/images/loading.svg";
 
 function RecentlyPlayed( {setPlayingTrackId}) {
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // Add a loading state
 
   console.log(setPlayingTrackId);
- 
 
   const handlePlay = (trackId) => {
     console.log("Playing track with ID:", trackId);
     setPlayingTrackId(trackId);
   };
-
-  
 
   useEffect(() => {
     axios
@@ -32,8 +31,12 @@ function RecentlyPlayed( {setPlayingTrackId}) {
             id: index,
           }));
         setRecentlyPlayed(uniqueTracks);
+        setIsLoading(false); 
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false); 
+      });
   }, []);
 
   useEffect(() => {
@@ -42,38 +45,41 @@ function RecentlyPlayed( {setPlayingTrackId}) {
 
   return (
     <div className="recents">
-
-      {recentlyPlayed.map((track, index) => (
-        <div key={index} className="recents__wrapper">
-          <div className="recent__container--title">
-            <span className="recent__rank">{index + 1}</span>
-            <img
-              src={track.track.album.images[0].url}
-              alt={track.track.name}
-              className="recent__image"
-            />
-            <span className="recent__title">{track.track.name}</span>
-          </div>
-          <div className="recent__container">
-            <span className="recent__artist">
-              {" "}
-              {track.track.artists.map((artist) => artist.name).join(", ")}
-            </span>
-          </div>
-          <div className="recent__link">
-            <button
-              className="recent__button"
-              onClick={() => handlePlay(track.track.id)}
-            >
+      {isLoading ? (
+        <img className="recents__loading" src={Loading} alt="Loading..." /> 
+      ) : (
+        recentlyPlayed.map((track, index) => (
+          <div key={index} className="recents__wrapper">
+            <div className="recent__container--title">
+              <span className="recent__rank">{index + 1}</span>
               <img
-                src={SpotifyPlayIcon}
-                alt="Spotify Play Icon"
-                className="recent__icon"
+                src={track.track.album.images[0].url}
+                alt={track.track.name}
+                className="recent__image"
               />
-            </button>
+              <span className="recent__title">{track.track.name}</span>
+            </div>
+            <div className="recent__container">
+              <span className="recent__artist">
+                {" "}
+                {track.track.artists.map((artist) => artist.name).join(", ")}
+              </span>
+            </div>
+            <div className="recent__link">
+              <button
+                className="recent__button"
+                onClick={() => handlePlay(track.track.id)}
+              >
+                <img
+                  src={SpotifyPlayIcon}
+                  alt="Spotify Play Icon"
+                  className="recent__icon"
+                />
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 }
