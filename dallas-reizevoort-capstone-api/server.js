@@ -276,7 +276,7 @@ app.get('/top-genres', async (req, res) => {
 
       const sortedGenres = Object.entries(genreCounts)
         .sort(([, countA], [, countB]) => countB - countA)
-        .slice(0, 25); 
+        .slice(0, 20); 
 
       return {
         timeRange: timeRanges[i],
