@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Login from "./components/Login/Login";
 import Dashboard from "./components/Dashboard/Dashboard";
 import RedirectHandler from "./Auth/RedirectHandler";
@@ -41,14 +41,14 @@ function App() {
     <Router>
       
       <AuthProvider code={code}>
-      <SpotifyPlayerProvider>
+      {/* <SpotifyPlayerProvider> */}
         <RedirectHandler code={code} />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard/*" element={<Dashboard code={code} />} />
           <Route path="/" element={<Login />} />
         </Routes>
-        </SpotifyPlayerProvider>
+        {/* </SpotifyPlayerProvider> */}
       </AuthProvider>
       
     </Router>

@@ -5,7 +5,7 @@ import AuthContext from "./AuthContext";
 function RedirectHandler({ code }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { error } = useContext(AuthContext);
+  const { error, } = useContext(AuthContext);
 
   useEffect(() => {
     if (code && !error && !location.pathname.startsWith("/dashboard")) {

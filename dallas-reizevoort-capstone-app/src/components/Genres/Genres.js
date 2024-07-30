@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Chart } from "react-google-charts";
 import axios from "axios";
 import "./Genres.scss";
+import Loading from "../../assets/images/loading.svg";
 
 function Genres({ selectedTimeRange }) {
+  const [isLoading, setIsLoading] = useState(true);
   const [topGenresShort, setTopGenresShort] = useState([]);
   const [topGenresMedium, setTopGenresMedium] = useState([]);
   const [topGenresLong, setTopGenresLong] = useState([]);
@@ -39,17 +41,21 @@ function Genres({ selectedTimeRange }) {
 
         if (short_term) {
           setTopGenresShort(short_term.topGenres);
+          setIsLoading(false);
         }
 
         if (medium_term) {
           setTopGenresMedium(medium_term.topGenres);
+          setIsLoading(false);
         }
 
         if (long_term) {
           setTopGenresLong(long_term.topGenres);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("API request failed:", error);
+        setIsLoading(false);
       }
     };
 
@@ -72,39 +78,44 @@ function Genres({ selectedTimeRange }) {
     topGenres = topGenresLong;
   }
 
-  return (
-    <div className="genres">
-      {topGenres && topGenres.length > 0 && (
-        <div style={{ height: '1000px', overflow: 'hidden' }}>
-          <Chart
-            width={chartSize.width}
-            height="1000px"
-            chartType="BarChart"
-            loader={<div>Loading Chart</div>}
-            data={getChartData(topGenres)}
-            options={{
-              fontSize: fontSize,
-              chartArea: { left: "30%", width: "100%" },
-              hAxis: {
-                textStyle: { color: "#FFF" },
-                gridlines: { color: "transparent" },
-                textPosition: "none",
-              },
-              vAxis: {
-                textStyle: { color: "#FFF" },
-                gridlines: { color: "transparent" },
-                textPosition: "out",
-              },
-              backgroundColor: "#000000",
-              legend: "none",
-              colors: ["#1bd760"],
-            }}
-          />
-        </div>
-      )}
-    </div>
-  );
-};
+    return (
+      <div className="genres">
+        {isLoading ? (
+          <img className="genres__loading" src={Loading} alt="Loading..." />      
+        ) : (
+          topGenres && topGenres.length > 0 && (
+            <div style={{ height: '1000px', overflow: 'hidden' }}>
+              <Chart
+                width={chartSize.width}
+                height="1000px"
+                chartType="BarChart"
+                loader={<div>Loading Chart</div>}
+                data={getChartData(topGenres)}
+                options={{
+                  fontSize: fontSize,
+                  chartArea: { left: "30%", top: "5%", width: "100%" },
+                  hAxis: {
+                    textStyle: { color: "#FFF" },
+                    gridlines: { color: "transparent" },
+                    textPosition: "none",
+                  },
+                  vAxis: {
+                    textStyle: { color: "#FFF" },
+                    gridlines: { color: "transparent" },
+                    textPosition: "out",
+                  },
+                  backgroundColor: "#000000",
+                  legend: "none",
+                  colors: ["#1bd760"],
+                  tooltip: { trigger: "none" },
+                }}
+              />
+            </div>
+          )
+        )}
+      </div>
+    );
+  };
 
 
 export default Genres;

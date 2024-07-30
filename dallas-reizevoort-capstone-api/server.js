@@ -8,7 +8,6 @@ dotenv.config();
 
 const app = express();
 
-// Apply middleware
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -73,11 +72,10 @@ const checkToken = async (req, res, next) => {
   }
 };
 
-
-// Ensure that /login and /refresh routes are handled without token check
+//login and /refresh routes are handled without token check
 app.post("/login", (req, res) => {
   const code = req.body.code;
-  console.log("Received code:", code); // Log the received code
+  console.log("Received code:", code);
 
   if (!code) {
     console.log("Code is missing");
@@ -93,7 +91,7 @@ app.post("/login", (req, res) => {
   spotifyApi
     .authorizationCodeGrant(code)
     .then((data) => {
-      console.log("Spotify API response:", data); // Log the Spotify API response
+      console.log("Spotify API response:", data);
 
       const accessToken = data.body.access_token;
       const refreshToken = data.body.refresh_token;
@@ -164,7 +162,6 @@ app.post("/refresh", (req, res) => {
     });
 });
 
-// Apply the checkToken middleware only to routes that require it
 app.use((req, res, next) => {
   if (["/login", "/refresh"].includes(req.path)) {
     return next();
@@ -173,8 +170,7 @@ app.use((req, res, next) => {
   }
 });
 
-// Define routes
-app.get("/search-tracks", async (req, res) => {
+app.get("/search-tracks", checkToken, async (req, res) => {
   const { query } = req.query;
   const accessToken = req.cookies.accessToken;
 
@@ -194,7 +190,7 @@ app.get("/search-tracks", async (req, res) => {
   }
 });
 
-app.get("/top-tracks", async (req, res) => {
+app.get("/top-tracks", checkToken, async (req, res) => {
   const accessToken = req.cookies.accessToken;
   console.log("Access token from request:", accessToken);
   if (!accessToken) {
@@ -220,7 +216,7 @@ app.get("/top-tracks", async (req, res) => {
   }
 });
 
-app.get("/top-artists", async (req, res) => {
+app.get("/top-artists", checkToken, async (req, res) => {
   const accessToken = req.cookies.accessToken;
   console.log("Access token from request:", accessToken);
   if (!accessToken) {
@@ -249,9 +245,9 @@ app.get("/top-artists", async (req, res) => {
   }
 });
 
-app.get('/top-genres', async (req, res) => {
+app.get("/top-genres", checkToken, async (req, res) => {
   const accessToken = req.cookies.accessToken;
-  console.log('Access token:', accessToken);
+  console.log("Access token:", accessToken);
   if (!accessToken) {
     return res.status(401).json({ error: "Access token not found" });
   }
@@ -260,23 +256,25 @@ app.get('/top-genres', async (req, res) => {
   spotifyApi.setAccessToken(accessToken);
 
   try {
-    const timeRanges = ['short_term', 'medium_term', 'long_term'];
-    const promises = timeRanges.map(timeRange => spotifyApi.getMyTopArtists({ time_range: timeRange, limit: 50 }));
+    const timeRanges = ["short_term", "medium_term", "long_term"];
+    const promises = timeRanges.map((timeRange) =>
+      spotifyApi.getMyTopArtists({ time_range: timeRange, limit: 50 })
+    );
     const results = await Promise.all(promises);
-    console.log('Spotify API results:', results);
+    console.log("Spotify API results:", results);
 
     const topGenres = results.map((result, i) => {
       const genreCounts = {};
 
-      result.body.items.forEach(artist => {
-        artist.genres.forEach(genre => {
+      result.body.items.forEach((artist) => {
+        artist.genres.forEach((genre) => {
           genreCounts[genre] = (genreCounts[genre] || 0) + 1;
         });
       });
 
       const sortedGenres = Object.entries(genreCounts)
         .sort(([, countA], [, countB]) => countB - countA)
-        .slice(0, 20); 
+        .slice(0, 20);
 
       return {
         timeRange: timeRanges[i],
@@ -286,13 +284,12 @@ app.get('/top-genres', async (req, res) => {
 
     res.json(topGenres);
   } catch (error) {
-    console.error('Failed to fetch top artists:', error);
-    res.status(500).json({ error: 'Failed to fetch top artists' });
+    console.error("Failed to fetch top artists:", error);
+    res.status(500).json({ error: "Failed to fetch top artists" });
   }
 });
 
-
-app.get("/recently-played", async (req, res) => {
+app.get("/recently-played", checkToken, async (req, res) => {
   const accessToken = req.cookies.accessToken;
   console.log("Access token from request:", accessToken);
   if (!accessToken) {
@@ -417,6 +414,12 @@ app.get("/playback", checkToken, (req, res) => {
 
   console.log("Access token found:", accessToken);
   res.json({ accessToken });
+});
+
+app.post("/logout", (req, res) => {
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
+  res.json({ message: "Logged out successfully" });
 });
 
 app.listen(3001, () => {

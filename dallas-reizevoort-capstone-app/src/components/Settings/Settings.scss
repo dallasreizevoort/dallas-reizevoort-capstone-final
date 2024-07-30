@@ -9,6 +9,7 @@
   align-items: center;
   flex-direction: column;
   position: relative;
+  margin-right: 2rem;
   @include tablet {
     padding-left: 5rem;
   }
@@ -30,9 +31,6 @@
   }
 
   &__dropdown {
-    display: flex;
-    flex-direction: column;
-    margin-right: 2rem;
     position: absolute;
     padding-top: 1.2rem;
     @include tablet {

@@ -7,12 +7,14 @@ const AuthContext = createContext();
 function AuthProvider({ children, code }) {
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
+  const [authCompleted, setAuthCompleted] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const authenticate = async () => {
       if (!code) {
         setLoading(false);
+        setAuthCompleted(true);
         return;
       }
 
@@ -21,9 +23,10 @@ function AuthProvider({ children, code }) {
         setAuthenticated(true);
       } catch (error) {
         console.error("Error during axios.post call to /login:", error);
-        // navigate("/");
+      
       } finally {
         setLoading(false);
+        setAuthCompleted(true);
       }
     };
 
@@ -31,7 +34,7 @@ function AuthProvider({ children, code }) {
   }, [code, navigate]);
 
   return (
-    <AuthContext.Provider value={{ loading, authenticated }}>
+    <AuthContext.Provider value={{ loading, authenticated, authCompleted }}>
       {children}
     </AuthContext.Provider>
   );

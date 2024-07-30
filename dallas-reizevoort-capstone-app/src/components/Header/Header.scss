@@ -18,6 +18,17 @@
   }
 }
 
+.search-dropdown.results-active {
+  margin-top: 10px; 
+}
+
+.header__wrap-all.results-active {
+  padding-bottom: 150px;
+  padding-top: 15px;
+}
+
+
+
 .header {
   display: flex;
   flex-direction: column;
@@ -39,7 +50,6 @@
   &__settings {
     display: flex;
     justify-content: space-between;
-    align-items: center;
 
     &--mobile {
       @include tablet {

@@ -17,7 +17,7 @@ import Footer from "../../components/Footer/Footer";
 import SpotifyPlayer from "../SpotifyPlayer/SpotifyPlayer";
 
 function Dashboard() {
-  const { accessToken } = useContext(AuthContext);
+  const { accessToken, authCompleted } = useContext(AuthContext);
   const [playingTrackId, setPlayingTrackId] = useState(null);
   const [selectedTimeRange, setSelectedTimeRange] = useState("short_term");
   const location = useLocation();
@@ -26,17 +26,21 @@ function Dashboard() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get('http://localhost:3001/top-tracks', { withCredentials: true });
-        setData(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+    if (authCompleted) {
+      const fetchData = async () => {
+        try {
+          const res = await axios.get("http://localhost:3001/top-tracks", {
+            withCredentials: true,
+          });
+          setData(res.data);
+        } catch (err) {
+          console.error(err);
+        }
+      };
 
-    fetchData();
-  }, []);
+      fetchData();
+    }
+  }, [authCompleted]);
 
   useEffect(() => {
     setPlayingTrackId(null);
@@ -55,32 +59,53 @@ function Dashboard() {
     setSelectedTimeRange(option);
   };
 
+  const excludedPaths = ["/dashboard/tracks", "/dashboard/artists", "/dashboard/genres"];
+
   return (
     <div className="dashboard">
       <Header accessToken={accessToken} setPlayingTrackId={setPlayingTrackId} />
-      
+
       <div className="dashboard__content">
         <div className="dashboard__nav">
           <div className="dashboard__icons--container">
-            <ul className="dashboard__dropdown-wrapper" onClick={toggleDropdown}>
-              <img className="dashboard__icons" src={UserStats} alt="user stats" />
+            <ul
+              className="dashboard__dropdown-wrapper"
+              onClick={toggleDropdown}
+            >
+              <img
+                className="dashboard__icons"
+                src={UserStats}
+                alt="user stats"
+              />
               <li className="dashboard__nav-list">
-                Stats <span className="dashboard__nav-list--arrow">&#x25BE;</span>{" "}
+                Stats{" "}
+                <span className="dashboard__nav-list--arrow">&#x25BE;</span>{" "}
               </li>
 
               {isDropdownVisible && (
                 <ul className={`dropdown ${isDropdownVisible ? "active" : ""}`}>
-                  <Link to="/dashboard/tracks" onClick={() => handleStatsOptionClick("short_term")}>
+                  <Link
+                    to="/dashboard/tracks"
+                    onClick={() => handleStatsOptionClick("short_term")}
+                  >
                     <li className="dashboard__dropdown--item">Top Tracks</li>
                   </Link>
-                  <Link to="/dashboard/artists" onClick={() => handleStatsOptionClick("short_term")}>
+                  <Link
+                    to="/dashboard/artists"
+                    onClick={() => handleStatsOptionClick("short_term")}
+                  >
                     <li className="dashboard__dropdown--item">Top Artists</li>
                   </Link>
-                  <Link to="/dashboard/genres" onClick={() => handleStatsOptionClick("short_term")}>
+                  <Link
+                    to="/dashboard/genres"
+                    onClick={() => handleStatsOptionClick("short_term")}
+                  >
                     <li className="dashboard__dropdown--item">Top Genres</li>
                   </Link>
                   <Link to="/dashboard/recent">
-                    <li className="dashboard__dropdown--item">Recently Played</li>
+                    <li className="dashboard__dropdown--item">
+                      Recently Played
+                    </li>
                   </Link>
                 </ul>
               )}
@@ -89,73 +114,109 @@ function Dashboard() {
 
           <Link to="/dashboard/mood" onClick={hideDropdown}>
             <div className="dashboard__icons--container">
-              <img className="dashboard__icons" src={UserMood} alt="user mood" />
+              <img
+                className="dashboard__icons"
+                src={UserMood}
+                alt="user mood"
+              />
               <li className="dashboard__nav-list">Your Mood</li>
             </div>
           </Link>
           <Link to="/dashboard/playlist" onClick={hideDropdown}>
             <div className="dashboard__icons--container">
-              <img className="dashboard__icons" src={UserPlaylist} alt="user playlist" />
+              <img
+                className="dashboard__icons"
+                src={UserPlaylist}
+                alt="user playlist"
+              />
               <li className="dashboard__nav-list">Create a Playlist</li>
             </div>
           </Link>
         </div>
 
         {[
-          "/dashboard/tracks",
-          "/dashboard/artists",
-          "/dashboard/genres",
-        ].includes(location.pathname) && (
-          <div className="dashboard__btn-wrapper">
-            <button
-              className={`dashboard__selected-btn ${selectedTimeRange === "short_term" ? "active" : ""}`}
-              onClick={() => setSelectedTimeRange("short_term")}
-            >
-              Last 4 weeks
-            </button>
-            <button
-              className={`dashboard__selected-btn ${selectedTimeRange === "medium_term" ? "active" : ""}`}
-              onClick={() => setSelectedTimeRange("medium_term")}
-            >
-              Last 6 months
-            </button>
-            <button
-              className={`dashboard__selected-btn ${selectedTimeRange === "long_term" ? "active" : ""}`}
-              onClick={() => setSelectedTimeRange("long_term")}
-            >
-              Last 12 months
-            </button>
-          </div>
-        )}
-<div className="dashboard__player">
-{playingTrackId && <SpotifyPlayer trackId={playingTrackId} />}
-</div>
-        <div className="dashboard__pages">
+  "/dashboard/tracks",
+  "/dashboard/artists",
+  "/dashboard/genres",
+].includes(location.pathname) && (
+  <div className={`dashboard__btn-wrapper ${isDropdownVisible ? "dropdown-active" : ""}`}>
+    <button
+      className={`dashboard__selected-btn ${
+        selectedTimeRange === "short_term" ? "active" : ""
+      }`}
+      onClick={() => setSelectedTimeRange("short_term")}
+    >
+      Last 4 weeks
+    </button>
+    <button
+      className={`dashboard__selected-btn ${
+        selectedTimeRange === "medium_term" ? "active" : ""
+      }`}
+      onClick={() => setSelectedTimeRange("medium_term")}
+    >
+      Last 6 months
+    </button>
+    <button
+      className={`dashboard__selected-btn ${
+        selectedTimeRange === "long_term" ? "active" : ""
+      }`}
+      onClick={() => setSelectedTimeRange("long_term")}
+    >
+      Last 12 months
+    </button>
+  </div>
+)}
+        <div className="dashboard__player">
+          {playingTrackId && <SpotifyPlayer trackId={playingTrackId} />}
+        </div>
+        <div
+           className={`dashboard__pages ${
+            isDropdownVisible && !excludedPaths.includes(location.pathname) ? "dropdown-active" : ""
+          }`}
+        >
           <Routes>
             <Route
               path="artists"
-              element={<Artists selectedTimeRange={selectedTimeRange} setSelectedTimeRange={setSelectedTimeRange} data={data} />}
+              element={
+                <Artists
+                  selectedTimeRange={selectedTimeRange}
+                  setSelectedTimeRange={setSelectedTimeRange}
+                  data={data}
+                />
+              }
             />
             <Route
               path="tracks"
-              element={<Tracks selectedTimeRange={selectedTimeRange} setSelectedTimeRange={setSelectedTimeRange} data={data} />}
+              element={
+                <Tracks
+                  selectedTimeRange={selectedTimeRange}
+                  setSelectedTimeRange={setSelectedTimeRange}
+                  data={data}
+                  setPlayingTrackId={setPlayingTrackId}
+                />
+              }
             />
             <Route
               path="genres"
-              element={<Genres selectedTimeRange={selectedTimeRange} setSelectedTimeRange={setSelectedTimeRange} data={data} />}
+              element={
+                <Genres
+                  selectedTimeRange={selectedTimeRange}
+                  setSelectedTimeRange={setSelectedTimeRange}
+                  data={data}
+                />
+              }
             />
             <Route
               path="recent"
-              element={<RecentlyPlayed data={data} setPlayingTrackId={setPlayingTrackId} />}
+              element={
+                <RecentlyPlayed
+                  data={data}
+                  setPlayingTrackId={setPlayingTrackId}
+                />
+              }
             />
-            <Route
-              path="playlist"
-              element={<Playlist data={data} />}
-            />
-            <Route
-              path="mood"
-              element={<Mood data={data} />}
-            />
+            <Route path="playlist" element={<Playlist data={data} setPlayingTrackId={setPlayingTrackId} />} />
+            <Route path="mood" element={<Mood data={data} />} />
           </Routes>
         </div>
         <Footer />

@@ -8,12 +8,11 @@ import Create from "../../assets/images/create_icon.png";
 import Save from "../../assets/images/save_icon.png";
 import Refresh from "../../assets/images/icons8-refresh-90.png";
 
-function Playlist() {
+function Playlist({setPlayingTrackId}) {
   const [userID, setUserID] = useState();
   const [playlist, setPlaylist] = useState(null);
   const [newPlaylist, setNewPlaylist] = useState(null);
   const [playlistDescription, setPlaylistDescription] = useState("");
-  const [playingTrackId, setPlayingTrackId] = useState(null);
   const [playlistCreated, setPlaylistCreated] = useState(false);
   const location = useLocation();
   const [playlistId, setPlaylistId] = useState(null);
@@ -35,6 +34,7 @@ function Playlist() {
         console.error("Error", err);
       });
   }, []);
+  
 
   const createPlaylist = async () => {
     try {
@@ -46,12 +46,12 @@ function Playlist() {
         return response.data;
       };
   
-      // Fetch top tracks from all time ranges with increased limit
+      
       const shortTermTracks = await fetchTopTracks("short_term");
       const mediumTermTracks = await fetchTopTracks("medium_term");
       const longTermTracks = await fetchTopTracks("long_term");
   
-      // Combine and deduplicate tracks, give more weight to frequently appearing tracks
+      
       const allTracks = [...shortTermTracks, ...mediumTermTracks, ...longTermTracks];
       const trackMap = allTracks.reduce((map, track) => {
         if (!map[track.id]) map[track.id] = { ...track, count: 0 };
@@ -63,7 +63,7 @@ function Playlist() {
   
       const sortedTracks = Object.values(trackMap).sort((a, b) => b.count - a.count);
       const trackIds = sortedTracks.map((track) => track.id);
-      const seedTracks = trackIds.slice(0, 5); // Spotify API allows a maximum of 5 seed tracks
+      const seedTracks = trackIds.slice(0, 5); 
   
       // Get recommendations based on seed tracks
       const recommendationsResponse = await axios.post(
@@ -164,9 +164,6 @@ function Playlist() {
             </button>
           </div>
         </>
-      )}
-      {playingTrackId && (
-        <SpotifyPlayer trackId={playingTrackId} onClose={() => setPlayingTrackId(null)} />
       )}
       {newPlaylist && newPlaylist.tracks && newPlaylist.tracks.length > 0 && (
         <>

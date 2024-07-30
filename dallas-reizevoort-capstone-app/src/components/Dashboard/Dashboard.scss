@@ -2,6 +2,29 @@
 @use "../../styles/partials/mixins.scss" as *;
 @use "../../styles/partials/global.scss" as *;
 
+
+
+.dashboard__pages.dropdown-active {
+  margin-top: 120px;
+}
+
+
+.dashboard__btn-wrapper.dropdown-active {
+  margin-top: 120px;
+}
+
+
+
+
+.dropdown {
+  &.active {
+    display: block;
+    position: absolute;
+    top: 100%;
+    
+  }
+}
+
 .dashboard {
   background-color: $background-color-primary;
   padding: 2rem 0.5rem 0.5rem 0.5rem;
@@ -155,12 +178,6 @@
     padding: 0;
     margin: 0;
 
-    &.active {
-      display: block;
-      position: absolute;
-      top: 100%;
-    }
-
     &--item {
       background-color: #242424;
       transition: background-color 0.3s ease;
@@ -210,7 +227,7 @@
     flex-grow: 1;
     justify-content: center;
     align-items: center;
-    padding-top: 1rem;
+    padding-top: 2rem;
     background-color: $background-color-primary;
     @include tablet {
       width: 100%;

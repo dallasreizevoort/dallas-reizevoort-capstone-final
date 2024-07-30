@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react"; // Import useContext
 import "./Header.scss";
 import Settings from "../Settings/Settings";
 import { Link } from "react-router-dom";
 import spotifyWebApi from "spotify-web-api-node";
 import axios from "axios";
+import AuthContext from "../../Auth/AuthContext"; // Import AuthContext
 
-function Header( {setPlayingTrackId} ) {
+function Header({ setPlayingTrackId }) {
+  const { authCompleted } = useContext(AuthContext); // Use useContext to get authCompleted
   const [userName, setUserName] = useState("");
   const [userPhoto, setUserPhoto] = useState("");
   const [search, setSearch] = useState("");
@@ -47,39 +49,41 @@ function Header( {setPlayingTrackId} ) {
   );
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const res = await axios.get('http://localhost:3001/user-profile', {
-          withCredentials: true, // Include credentials
-        });
+    if (authCompleted) { // Check if auth is completed
+      const fetchUserProfile = async () => {
+        try {
+          const res = await axios.get('http://localhost:3001/user-profile', {
+            withCredentials: true, // Include credentials
+          });
 
-        console.log('User profile response:', res); // Debugging line
-        if (res.status !== 200) {
-          throw new Error('Network response was not ok');
+          console.log('User profile response:', res); // Debugging line
+          if (res.status !== 200) {
+            throw new Error('Network response was not ok');
+          }
+
+          // Check if the response is JSON
+          const contentType = res.headers['content-type'];
+          if (!contentType || !contentType.includes('application/json')) {
+            throw new TypeError("Oops, we haven't got JSON!");
+          }
+
+          const data = res.data;
+          console.log('User profile data:', data); // Debugging line
+          setUserName(data.display_name);
+          if (data.images && data.images.length > 0) {
+            const sortedImages = data.images.sort(
+              (a, b) => b.width - a.width
+            );
+            setUserPhoto(sortedImages[0].url);
+          }
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
         }
+      };
 
-        // Check if the response is JSON
-        const contentType = res.headers['content-type'];
-        if (!contentType || !contentType.includes('application/json')) {
-          throw new TypeError("Oops, we haven't got JSON!");
-        }
-
-        const data = res.data;
-        console.log('User profile data:', data); // Debugging line
-        setUserName(data.display_name);
-        if (data.images && data.images.length > 0) {
-          const sortedImages = data.images.sort(
-            (a, b) => b.width - a.width
-          );
-          setUserPhoto(sortedImages[0].url);
-        }
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-      }
-    };
-
-    fetchUserProfile();
-  }, []);
+      fetchUserProfile();
+    }
+  }, [authCompleted]);
 
   useEffect(() => {
     if (!search) {
@@ -126,9 +130,13 @@ function Header( {setPlayingTrackId} ) {
     };
   }, [search]);
 
+  if (!authCompleted) {
+    return <div>Loading...</div>; // Show loading until auth is completed
+  }
+
   return (
-    <div className="header">
-      <div className="header__wrap-all">
+    <div className={`header ${isDropdownVisible ? 'dropdown-active' : ''}`}>
+      <div className={`header__wrap-all ${searchResults.length > 0 ? 'results-active' : ''}`}>
         <div className="header__container">
           <div className="header__settings">
             <div className="header__wrapper">
@@ -149,7 +157,7 @@ function Header( {setPlayingTrackId} ) {
           </div>
         </div>
 
-        <div className="search">
+        <div className={`search ${isDropdownVisible && searchResults.length > 0 ? 'dropdown-active' : ''}`}>
           <input
             type="text"
             placeholder="Search a song"
@@ -158,23 +166,23 @@ function Header( {setPlayingTrackId} ) {
             onBlur={handleBlur}
             className="search__input"
           />
-          {isDropdownVisible && searchResults.length > 0 && (
-            <div className="search-dropdown" onMouseDown={handleDropdownClick}>
-              {searchResults.map(track => (
-                <div
-                  key={track.uri}
-                  className="search-dropdown__item"
-                  onClick={() => handleSongSelect(track)}
-                >
-                  <div className="search-dropdown__wrapper">
-                    <img src={track.albumUrl} style={{ height: "20px", width: "20px" }} alt={track.title} />
-                    <div className="search-dropdown__title">{track.title}</div>
-                  </div>
-                  <div className="search-dropdown__artist">{track.artist}</div>
-                </div>
-              ))}
-            </div>
-          )}
+        {isDropdownVisible && searchResults.length > 0 && (
+  <div className={`search-dropdown ${searchResults.length > 0 ? 'results-active' : ''}`} onMouseDown={handleDropdownClick}>
+    {searchResults.map(track => (
+      <div
+        key={track.uri}
+        className="search-dropdown__item"
+        onClick={() => handleSongSelect(track)}
+      >
+        <div className="search-dropdown__wrapper">
+          <img src={track.albumUrl} style={{ height: "20px", width: "20px" }} alt={track.title} />
+          <div className="search-dropdown__title">{track.title}</div>
+        </div>
+        <div className="search-dropdown__artist">{track.artist}</div>
+      </div>
+    ))}
+  </div>
+)}
         </div>
 
         <div className="header__settings--desktop">

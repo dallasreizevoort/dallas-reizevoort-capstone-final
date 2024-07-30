@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
-import spotifyWebApi from "spotify-web-api-node";
+import React, { useState, useEffect } from "react";
 import SpotifyPlayIcon from "../../assets/images/Spotify_Play.png";
-import SpotifyPlayer from "../SpotifyPlayer/SpotifyPlayer";
 import "./Tracks.scss";
 import axios from "axios";
+import Loading from "../../assets/images/loading.svg";
 
-function Tracks({ selectedTimeRange, setSelectedTimeRange, data }) {
+function Tracks({
+  setPlayingTrackId,
+  selectedTimeRange,
+  setSelectedTimeRange,
+  data,
+}) {
   console.log("Tracks component rendered");
-  console.log("Data prop:", data); // Log data prop
-  // const [topTracks, setTopTracks] = useState([]);
-  // const [topTracksShort, setTopTracksShort] = useState([]);
-  // const [topTracksMedium, setTopTracksMedium] = useState([]);
-  // const [topTracksLong, setTopTracksLong] = useState([]);
+  console.log("Data prop:", data); 
 
   const [topTracks, setTopTracks] = useState({
     short_term: [],
@@ -19,15 +19,7 @@ function Tracks({ selectedTimeRange, setSelectedTimeRange, data }) {
     long_term: [],
   });
 
-
-  const [playingTrackId, setPlayingTrackId] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const spotifyApi = useRef(
-    new spotifyWebApi({
-      clientId: process.env.REACT_APP_CLIENT_ID,
-    })
-  );
 
   const handlePlay = (trackId) => {
     console.log("Playing track with ID:", trackId);
@@ -40,43 +32,36 @@ function Tracks({ selectedTimeRange, setSelectedTimeRange, data }) {
         const res = await axios.get("http://localhost:3001/top-tracks", {
           withCredentials: true,
         });
-        console.log("API response:", res.data); // Log API response
-        setTopTracks(res.data); // Update the state variable with the new data
+        console.log("API response:", res.data);
+        setTopTracks(res.data);
       } catch (error) {
-        console.error("API request failed:", error); // Log error
+        console.error("API request failed:", error);
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchData();
   }, []);
 
   useEffect(() => {
     if (data) {
-      setTopTracks(data); // Update the state variable with the new data
+      setTopTracks(data); 
     }
   }, [data]);
 
   useEffect(() => {
-    console.log('Tracks component re-rendered due to prop change');
+    console.log("Tracks component re-rendered due to prop change");
   }, [selectedTimeRange, setSelectedTimeRange, data]);
 
   console.log("Top Tracks", topTracks);
 
-
   if (loading) {
-    return <div>Loading...</div>;
+    return <img className="tracks__loading" src={Loading} alt="Loading..."/>
   }
 
   return (
     <div className="tracks">
-      {playingTrackId && (
-        <SpotifyPlayer
-          trackId={playingTrackId}
-          onClose={() => setPlayingTrackId(null)}
-        />
-      )}
       {selectedTimeRange === "short_term" &&
         topTracks.short_term &&
         topTracks.short_term.map((track, index) => (
