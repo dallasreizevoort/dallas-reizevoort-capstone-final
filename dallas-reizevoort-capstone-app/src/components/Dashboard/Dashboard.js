@@ -24,6 +24,12 @@ function Dashboard() {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [isStatsOptionSelected, setIsStatsOptionSelected] = useState(false);
   const [data, setData] = useState(null);
+  const [showPlayer, setShowPlayer] = useState(false);
+
+  const handleClose = () => {
+    console.log("close button triggered from dashboard");
+    setPlayingTrackId(null);
+  }
 
   useEffect(() => {
     if (authCompleted) {
@@ -167,7 +173,7 @@ function Dashboard() {
   </div>
 )}
         <div className="dashboard__player">
-          {playingTrackId && <SpotifyPlayer trackId={playingTrackId} />}
+          {playingTrackId && <SpotifyPlayer trackId={playingTrackId} handleClose={handleClose} />}
         </div>
         <div
            className={`dashboard__pages ${

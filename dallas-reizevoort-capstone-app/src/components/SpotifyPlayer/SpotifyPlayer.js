@@ -9,7 +9,7 @@ import PreviousIcon from "../../assets/images/skip_previous_50dp_E3E3E3.svg";
 
 const spotifyApi = new SpotifyWebApi();
 
-function SpotifyPlayer({ trackId, onClose }) {
+function SpotifyPlayer({ trackId, handleClose }) {
   const [player, setPlayer] = useState(null);
   const [deviceId, setDeviceId] = useState(null);
   const [trackInfo, setTrackInfo] = useState({});
@@ -18,6 +18,7 @@ function SpotifyPlayer({ trackId, onClose }) {
   const [duration, setDuration] = useState(0);
   const scriptLoaded = useRef(false);
   const intervalRef = useRef(null);
+
 
   useEffect(() => {
     let playerInstance;
@@ -178,7 +179,7 @@ function SpotifyPlayer({ trackId, onClose }) {
         </div>
         </div>
         <div className="spotify-player__close">
-        <button className="spotify-player__close--button" onClick={onClose}>
+        <button className="spotify-player__close--button" onClick={handleClose}>
         X
       </button>
       </div>

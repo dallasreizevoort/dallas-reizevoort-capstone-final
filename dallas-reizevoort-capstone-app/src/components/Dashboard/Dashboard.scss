@@ -72,7 +72,8 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    margin-top: 2rem;
+    // margin-top: 2rem;
+    margin-bottom: 2rem;
     
     @include tablet {
       justify-content: space-evenly;
@@ -88,6 +89,7 @@
     @include mobile {
       padding: 1rem 0rem 1rem 0rem;
       font-size: 12px;
+      min-width: 90px;
     }
     @include tablet {
       font-size: 16px;
@@ -108,6 +110,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-width: 90px;
+      height: 70px;
       @include tablet {
         width: 150px;
       }
@@ -145,6 +149,7 @@
   &__nav-list {
     margin-top: 0.5rem;
     font-size: 11px;
+    text-align: center;
 
     @include tablet {
       margin-top: 1rem;
@@ -178,6 +183,7 @@
     padding: 0;
     margin: 0;
 
+
     &--item {
       background-color: #242424;
       transition: background-color 0.3s ease;
@@ -192,6 +198,7 @@
       z-index: 1;
       text-align: center;
       text-wrap: nowrap;
+      transition: background-color 0.3s ease;
 
       &:hover {
         background-color: $secondary-color-green;
@@ -200,6 +207,7 @@
       @include tablet {
         padding: 14px;
         font-size: 16px;
+        
       }
     }
   }
