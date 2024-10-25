@@ -3,6 +3,8 @@ import SpotifyWebApi from "spotify-web-api-node";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import { insertUser } from "./database/user_db.js";
+import pool from "./config/db.js";
 
 dotenv.config();
 
@@ -73,7 +75,7 @@ const checkToken = async (req, res, next) => {
 };
 
 //login and /refresh routes are handled without token check
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const code = req.body.code;
   console.log("Received code:", code);
 
@@ -88,44 +90,76 @@ app.post("/login", (req, res) => {
     clientSecret: process.env.CLIENT_SECRET,
   });
 
-  spotifyApi
-    .authorizationCodeGrant(code)
-    .then((data) => {
-      console.log("Spotify API response:", data);
+  try {
+    const data = await spotifyApi.authorizationCodeGrant(code);
+    console.log("Spotify API response received:", data);
 
-      const accessToken = data.body.access_token;
-      const refreshToken = data.body.refresh_token;
+    const accessToken = data.body.access_token;
+    const refreshToken = data.body.refresh_token;
 
-      if (!accessToken || !refreshToken) {
-        console.log("Failed to retrieve tokens from Spotify");
-        return res
-          .status(400)
-          .json({ error: "Failed to retrieve tokens from Spotify" });
-      }
+    if (!accessToken || !refreshToken) {
+      console.log("Failed to retrieve tokens from Spotify");
+      return res
+        .status(400)
+        .json({ error: "Failed to retrieve tokens from Spotify" });
+    }
 
-      res.cookie("accessToken", accessToken, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
-      });
-      console.log("Access token cookie set");
+    console.log("Access Token:", accessToken);
+    console.log("Refresh Token:", refreshToken);
 
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
-      });
-      console.log("Refresh token cookie set");
-
-      res.json({
-        expiresIn: data.body.expires_in,
-      });
-    })
-    .catch((err) => {
-      console.error("Spotify authorization error:", err.message);
-      console.error(err);
-      res.status(400).json({ error: "Failed to authorize code" });
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: false, // Change to true in production
+      sameSite: "lax",
     });
+    console.log("Access token cookie set");
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false, // Change to true in production
+      sameSite: "lax",
+    });
+    console.log("Refresh token cookie set");
+
+    // Set the access token for the Spotify API instance
+    spotifyApi.setAccessToken(accessToken);
+
+    try {
+      console.log("Calling getMe()");
+      const me = await spotifyApi.getMe();
+      console.log("User profile from Spotify:", me.body);
+
+      const userId = me.body.id;
+      const displayName = me.body.display_name;
+      const email = me.body.email;
+      const country = me.body.country;
+
+      console.log("Inserting/updating user:", {
+        userId,
+        displayName,
+        email,
+        country,
+      });
+
+      const result = await insertUser(req, userId, displayName, email, country);
+
+      console.log("Database operation result:", result);
+
+      // Check for warnings
+      const [warnings] = await pool.query("SHOW WARNINGS");
+      console.log("Database warnings:", warnings);
+    } catch (getMeError) {
+      console.error("Error getting user profile:", getMeError);
+      return res.status(400).json({ error: "Failed to get user profile" });
+    }
+
+    res.json({
+      expiresIn: data.body.expires_in,
+    });
+  } catch (err) {
+    console.error("Spotify authorization error:", err.message);
+    res.status(400).json({ error: "Failed to authorize code" });
+  }
 });
 
 app.post("/refresh", (req, res) => {
