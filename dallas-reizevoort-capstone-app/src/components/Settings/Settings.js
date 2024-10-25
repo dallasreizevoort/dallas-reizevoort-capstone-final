@@ -1,26 +1,32 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import "./Settings.scss";
 import SettingsIcon from "../../assets/images/settings_icon_green.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import AuthContext from "../../Auth/AuthContext";
 
 function Settings({ accessToken }) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { setAuthenticated } = useContext(AuthContext);
 
-  
-  const handleLogout = () => {
-    axios.post('http://localhost:3001/logout', {}, { withCredentials: true })
-      .then(response => {
-        if (response.status === 200) {
-          navigate('/login');
-        } else {
-          console.error('Failed to logout');
-        }
-      })
-      .catch(error => {
-        console.error('Error logging out:', error);
-      });
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/logout",
+        {},
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        console.log("Logout successful");
+        setAuthenticated(false);
+        navigate("/login");
+      } else {
+        console.error("Failed to logout");
+      }
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
   const handleSpotifyRedirect = () => {
@@ -31,7 +37,7 @@ function Settings({ accessToken }) {
     setIsOpen(!isOpen);
   };
 
-  const dropdownRef = useRef (null);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -42,8 +48,7 @@ function Settings({ accessToken }) {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }
-  , [dropdownRef]);
+  }, [dropdownRef]);
 
   return (
     <div className="settings">
