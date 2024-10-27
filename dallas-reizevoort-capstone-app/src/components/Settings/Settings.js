@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import "./Settings.scss";
 import SettingsIcon from "../../assets/images/settings_icon_green.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../../Auth/AuthContext";
 
@@ -61,7 +61,9 @@ function Settings({ accessToken }) {
 
       {isOpen && (
         <ul className="settings__dropdown" ref={dropdownRef}>
-          <li onClick={handleSpotifyRedirect}>Manage</li>
+          <li>
+            <Link to="/profile">Manage Profile</Link>
+          </li>
           <li onClick={handleLogout}>Logout</li>
         </ul>
       )}

@@ -1,0 +1,72 @@
+@use "../../styles/partials/variables.scss" as *;
+@use "../../styles/partials/mixins.scss" as *;
+@use "../../styles/partials/global.scss" as *;
+// $img-path: "../../assets/images/default-user.svg";
+
+.user-profile {
+  background-color: $background-color-primary;
+  padding: 2rem 0.5rem 0.5rem 0.5rem;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  @include tablet {
+    padding: 2.5rem 0rem 2.5rem 0rem;
+    overflow: visible;
+  }
+  @include mobile {
+    width: auto;
+    height: auto;
+  }
+}
+
+.user-settings {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &__photo {
+    background-size: cover;
+    background-position: center;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+}
+
+.user-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 1rem;
+    align-items: center;
+
+
+    &__button {
+        background-color: $background-color-primary;
+        color: $font-color-primary;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 5px;
+        margin: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 175px;
+        height: 50px;
+        font-size: 16px;
+        border: 2px $secondary-color-green solid;
+    
+        &:hover {
+            background-color: $background-color-primary;
+        }
+    }
+    
+}

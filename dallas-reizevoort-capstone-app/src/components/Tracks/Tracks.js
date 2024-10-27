@@ -10,8 +10,8 @@ function Tracks({
   setSelectedTimeRange,
   data,
 }) {
-  console.log("Tracks component rendered");
-  console.log("Data prop:", data); 
+  // console.log("Tracks component rendered");
+  // console.log("Data prop:", data); 
 
   const [topTracks, setTopTracks] = useState({
     short_term: [],
@@ -22,7 +22,7 @@ function Tracks({
   const [loading, setLoading] = useState(true);
 
   const handlePlay = (trackId) => {
-    console.log("Playing track with ID:", trackId);
+    // console.log("Playing track with ID:", trackId);
     setPlayingTrackId(trackId);
   };
 
@@ -32,10 +32,10 @@ function Tracks({
         const res = await axios.get("http://localhost:3001/top-tracks", {
           withCredentials: true,
         });
-        console.log("API response:", res.data);
+        // console.log("API response:", res.data);
         setTopTracks(res.data);
       } catch (error) {
-        console.error("API request failed:", error);
+        // console.error("API request failed:", error);
       } finally {
         setLoading(false);
       }
@@ -51,7 +51,7 @@ function Tracks({
   }, [data]);
 
   useEffect(() => {
-    console.log("Tracks component re-rendered due to prop change");
+    // console.log("Tracks component re-rendered due to prop change");
   }, [selectedTimeRange, setSelectedTimeRange, data]);
 
   console.log("Top Tracks", topTracks);
