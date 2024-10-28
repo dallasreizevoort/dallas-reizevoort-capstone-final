@@ -6,6 +6,7 @@ import "./styles/partials/global.scss";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./Auth/AuthContext";
 import { SpotifyPlayerProvider } from "./Contexts/SpotifyPlayerContext";
+import UserProfile from "./components/UserProfile/UserProfile";
 
 /*TO DO:
 1. Store token in server
@@ -41,14 +42,13 @@ function App() {
     <Router>
       
       <AuthProvider code={code}>
-      {/* <SpotifyPlayerProvider> */}
         <RedirectHandler code={code} />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard/*" element={<Dashboard code={code} />} />
           <Route path="/" element={<Login />} />
+          <Route path="/dashboard/profile" element={<UserProfile />}  />
         </Routes>
-        {/* </SpotifyPlayerProvider> */}
       </AuthProvider>
       
     </Router>

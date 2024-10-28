@@ -62,7 +62,7 @@ function Settings({ accessToken }) {
       {isOpen && (
         <ul className="settings__dropdown" ref={dropdownRef}>
           <li>
-            <Link to="/profile">Manage Profile</Link>
+            <Link to="/dashboard/profile">Manage Profile</Link> {/* Convert to Link */}
           </li>
           <li onClick={handleLogout}>Logout</li>
         </ul>

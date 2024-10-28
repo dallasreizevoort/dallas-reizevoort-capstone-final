@@ -6,7 +6,7 @@ import { format } from "date-fns";
 const insertUser = async (req, userID, displayName, email, country) => {
   try {
     const ipAddress =
-      req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+      req.headers["x-forwarded-for"] || req.socket.remoteAddress || "Unknown";
 
     const parser = new UAParser();
     const result = parser.setUA(req.headers["user-agent"]).getResult();
@@ -64,7 +64,9 @@ const insertUser = async (req, userID, displayName, email, country) => {
 
     console.log("User added/updated in database", rows);
     const [warnings] = await pool.query("SHOW WARNINGS");
-    console.log("Warnings", warnings);
+    if (warnings.length > 0) {
+      console.log("Warnings", warnings);
+    }
 
     return rows;
   } catch (err) {

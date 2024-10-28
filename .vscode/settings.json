@@ -9,10 +9,9 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
-            "name": "test",
+            "name": "trackify",
             "database": "trackify",
-            "username": "root",
-            "askForPassword": true
+            "username": "root"
         }
     ]
 }
